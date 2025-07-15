@@ -1,0 +1,12 @@
+class Solution {
+    public boolean isPalindrome(String str) {
+        str = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        StringBuilder s=new StringBuilder(str).reverse();
+        if (str.equals(s.toString())) {
+            return true;
+        }
+        return false;
+
+
+    }
+}
