@@ -1,0 +1,32 @@
+import java.util.*;
+
+class Solution {
+    static final int MOD = 1_000_000_007, MAX = 100_001;
+    static long[] fact = new long[MAX], invFact = new long[MAX];
+
+    static {
+        fact[0] = invFact[0] = 1;
+        for (int i = 1; i < MAX; i++) {
+            fact[i] = fact[i - 1] * i % MOD;
+            invFact[i] = pow(fact[i], MOD - 2);
+        }
+    }
+
+    public int numberOfSequence(int n, int[] sick) {
+        Arrays.sort(sick);
+        long res = fact[n - sick.length] * invFact[sick[0]] % MOD * invFact[n - 1 - sick[sick.length - 1]] % MOD;
+        for (int i = 1; i < sick.length; i++) {
+            int gap = sick[i] - sick[i - 1] - 1;
+            if (gap > 0)
+                res = res * invFact[gap] % MOD * pow(2, gap - 1) % MOD;
+        }
+        return (int) res;
+    }
+
+    private static long pow(long base, long exp) {
+        long res = 1;
+        for (; exp > 0; base = base * base % MOD, exp >>= 1)
+            if ((exp & 1) == 1) res = res * base % MOD;
+        return res;
+    }
+}
