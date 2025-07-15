@@ -1,0 +1,20 @@
+class Solution {
+    public int leftMostColumnWithOne(BinaryMatrix binaryMatrix) {
+        List<Integer> dims = binaryMatrix.dimensions();
+        int rows = dims.get(0), cols = dims.get(1);
+
+        int row = 0, col = cols - 1;
+        int result = -1;
+
+        while (row < rows && col >= 0) {
+            if (binaryMatrix.get(row, col) == 1) {
+                result = col;  // update answer
+                col--;         // move left
+            } else {
+                row++;         // move down
+            }
+        }
+
+        return result;
+    }
+}
