@@ -1,0 +1,25 @@
+1349. Maximum Students Taking Exam
+
+Given a m * n matrix seats  that represent seats distributions in a classroom. If a seat is broken, it is denoted by '#' character otherwise it is denoted by a '.' character.
+Students can see the answers of those sitting next to the left, right, upper left and upper right, but he cannot see the answers of the student sitting directly in front or behind him. Return the maximum number of students that can take the exam together without any cheating being possible.
+Students must be placed in seats in good condition.
+
+
+from functools import lru_cache
+
+class Solution:
+    def maxStudents(self, seats):
+        m, n = len(seats), len(seats[0])
+        valid = [int(''.join('1' if c == '.' else '0' for c in row), 2) for row in seats]
+
+        @lru_cache(None)
+        def dfs(row, prev):
+            if row == m: return 0
+            res = 0
+            for cur in range(1 << n):
+                if (cur & valid[row]) == cur and not (cur & (cur >> 1)) and \
+                   not (cur & (prev >> 1)) and not (cur & (prev << 1)):
+                    res = max(res, bin(cur).count('1') + dfs(row + 1, cur))
+            return res
+
+        return dfs(0, 0)
