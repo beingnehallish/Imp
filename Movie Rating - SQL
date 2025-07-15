@@ -10,17 +10,19 @@ movie_id is the primary key (column with unique values) for this table.
 title is the name of the movie.
  
 
-(SELECT name AS results
-FROM MovieRating JOIN Users USING(user_id)
-GROUP BY name
-ORDER BY COUNT(*) DESC, name
-LIMIT 1)
-
+(
+  SELECT u.name AS results
+  FROM MovieRating mr JOIN Users u ON mr.user_id = u.user_id
+  GROUP BY u.name
+  ORDER BY COUNT(*) DESC, u.name
+  LIMIT 1
+)
 UNION ALL
-
-(SELECT title AS results
-FROM MovieRating JOIN Movies USING(movie_id)
-WHERE EXTRACT(YEAR_MONTH FROM created_at) = 202002
-GROUP BY title
-ORDER BY AVG(rating) DESC, title
-LIMIT 1);
+(
+  SELECT m.title AS results
+  FROM MovieRating mr JOIN Movies m ON mr.movie_id = m.movie_id
+  WHERE DATE_FORMAT(mr.created_at, '%Y-%m') = '2020-02'
+  GROUP BY m.title
+  ORDER BY AVG(mr.rating) DESC, m.title
+  LIMIT 1
+);
