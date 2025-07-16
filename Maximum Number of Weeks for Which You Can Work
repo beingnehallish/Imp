@@ -1,0 +1,17 @@
+class Solution {
+    public long numberOfWeeks(int[] milestones) {
+        long totalSum = 0, max = 0;
+
+        for (int n : milestones) {
+            totalSum += n;
+            max = Math.max(max, n);
+        }
+        long sumExceptMax = totalSum - max;
+
+        if (max > sumExceptMax) {
+            return 1 + sumExceptMax * 2;  //2s+1
+        }
+
+        return totalSum;
+    }
+}
